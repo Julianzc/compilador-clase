@@ -9,7 +9,7 @@ namespace compilador.TablaSimbolos
 {
     public class TablaDummy
     {
-        private Dictionary<string, ComponenteLexico> TablaReservadas = new Dictionary<string, ComponenteLexico>();
+        
         private Dictionary<string, List<ComponenteLexico>> Tabla = new Dictionary<string, List<ComponenteLexico>>();
         private static TablaDummy INSTANCIA = new TablaDummy();
 
@@ -23,44 +23,25 @@ namespace compilador.TablaSimbolos
             return INSTANCIA;
         }
 
-        private void Inicializar()
-        {
-            //Aquí defino todas las palabras reservadas de mi lenguaje
-            TablaReservadas.Add("palabra", ComponenteLexico.Crear("palabra", Categoria.PALABRA, Tipo.PALABRA_RESERVADA));
-            TablaReservadas.Add("OtraPalabra", ComponenteLexico.Crear("OtraPalabra", Categoria.PALABRA, Tipo.PALABRA_RESERVADA));
-
-        }
-
-        private void ValidarSiComponenteEsPalabraReservada(ComponenteLexico Componente)
-        {
-            if (Componente != null && TablaReservadas.ContainsKey(Componente.ObtenerLexema()))
-            {
-                ComponenteLexico PalabraReservada = TablaReservadas[Componente.ObtenerLexema()];
-                Componente = ComponenteLexico.Crear(PalabraReservada.ObtenerLexema(), PalabraReservada.ObtenerCategoria(), Componente.ObtenerNumeroLinea(), Componente.ObtenerPosicionInicial(), Componente.ObtenerPosicionFinal(), Tipo.PALABRA_RESERVADA);
-            }
-        }
-
-
         public void Limpiar()
         {
             Tabla.Clear();
         }
 
-        private List<ComponenteLexico> ObtenerSimbolo(string Simbolo)
+        private List<ComponenteLexico> ObtenerDummy(string Dummy)
         {
-            if (!Tabla.ContainsKey(Simbolo))
+            if (!Tabla.ContainsKey(Dummy))
             {
-                Tabla.Add(Simbolo, new List<ComponenteLexico>());
+                Tabla.Add(Dummy, new List<ComponenteLexico>());
             }
-            return Tabla[Simbolo];
+            return Tabla[Dummy];
         }
 
         public void Agregar(ComponenteLexico Componente)
         {
             if (Componente != null && Tipo.DUMMY.Equals(Componente.ObtenerTipo()))
             {
-                ObtenerSimbolo(Componente.ObtenerLexema()).Add(Componente);
-
+                ObtenerDummy(Componente.ObtenerLexema()).Add(Componente);
             }
         }
 

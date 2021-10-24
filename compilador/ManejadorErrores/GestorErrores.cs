@@ -15,7 +15,6 @@ namespace compilador.ManejadorErrores
         {
             Iniciar();
         }
-
         private void Iniciar()
         {
             Tabla.Clear();
@@ -23,7 +22,6 @@ namespace compilador.ManejadorErrores
             Tabla.Add(TipoError.SINTACTICO, new List<Error>());
             Tabla.Add(TipoError.SEMANTICO, new List<Error>());
         }
-
         public static GestorErrores ObtenerInstancia()
         {
             return INSTANCIA;
@@ -34,16 +32,7 @@ namespace compilador.ManejadorErrores
             Iniciar();
         }
 
-        private List<Error> ObtenerSimbolo(string Simbolo)
-        {
-            if (!Tabla.ContainsKey(Simbolo))
-            {
-                Tabla.Add(Simbolo, new List<Error>());
-            }
-            return Tabla[Simbolo];
-        }
-
-        public void Agregar(Error Error )
+        public void Agregar(Error Error)
         {
             if (Error != null)
             {
@@ -55,12 +44,10 @@ namespace compilador.ManejadorErrores
         {
             return Tabla[Tipo].Count > 0;
         }
-
         public bool HayErrores()
         {
-            return HayErrores(TipoError.LEXICO) || HayErrores(TipoError.SEMANTICO) || HayErrores(TipoError.SINTACTICO);
+            return HayErrores(TipoError.LEXICO) || HayErrores(TipoError.SINTACTICO) || HayErrores(TipoError.SEMANTICO);
         }
-
         public List<Error> ObtenerErrores(TipoError Tipo)
         {
             return Tabla[Tipo];

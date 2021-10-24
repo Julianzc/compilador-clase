@@ -45,22 +45,22 @@ namespace compilador.TablaSimbolos
             Tabla.Clear();
         }
 
-        private List<ComponenteLexico> ObtenerSimbolo(string Simbolo)
+        private List<ComponenteLexico> ObtenerReservada(string Reservada)
         {
-            if (!Tabla.ContainsKey(Simbolo))
+            if (!Tabla.ContainsKey(Reservada))
             {
-                Tabla.Add(Simbolo, new List<ComponenteLexico>());
+                Tabla.Add(Reservada, new List<ComponenteLexico>());
             }
-            return Tabla[Simbolo];
+            return Tabla[Reservada];
         }
 
         public void Agregar(ComponenteLexico Componente)
         {
             ValidarSiComponenteEsPalabraReservada(Componente);
 
-            if (Componente != null && Tipo.LITERAL.Equals(Componente.ObtenerTipo()))
+            if (Componente != null && Tipo.PALABRA_RESERVADA.Equals(Componente.ObtenerTipo()))
             {
-                ObtenerSimbolo(Componente.ObtenerLexema()).Add(Componente);
+                ObtenerReservada(Componente.ObtenerLexema()).Add(Componente);
 
             }
         }

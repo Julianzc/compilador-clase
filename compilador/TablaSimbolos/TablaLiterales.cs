@@ -27,20 +27,20 @@ namespace compilador.TablaSimbolos
             Tabla.Clear();
         }
 
-        private List<ComponenteLexico> ObtenerSimbolo(string Simbolo)
+        private List<ComponenteLexico> ObtenerLiteral(string Literal)
         {
-            if (!Tabla.ContainsKey(Simbolo))
+            if (!Tabla.ContainsKey(Literal))
             {
-                Tabla.Add(Simbolo, new List<ComponenteLexico>());
+                Tabla.Add(Literal, new List<ComponenteLexico>());
             }
-            return Tabla[Simbolo];
+            return Tabla[Literal];
         }
 
         public void Agregar(ComponenteLexico Componente)
         {
             if (Componente != null && Tipo.LITERAL.Equals(Componente.ObtenerTipo()))
             {
-                ObtenerSimbolo(Componente.ObtenerLexema()).Add(Componente);
+                ObtenerLiteral(Componente.ObtenerLexema()).Add(Componente);
 
             }
         }

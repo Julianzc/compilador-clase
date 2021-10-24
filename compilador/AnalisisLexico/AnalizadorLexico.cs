@@ -56,7 +56,7 @@ namespace compilador.AnalisisLexico
             {
                 CaracterActual = LineaActual.ObtenerContenido();
             }
-            else if (Puntero > LineaActual.ObtenerLongitud()-1)
+            else if (Puntero > LineaActual.ObtenerLongitud() - 1)
             {
                 Puntero = LineaActual.ObtenerLongitud() + 1;
                 CaracterActual = "@FL@";
@@ -70,7 +70,7 @@ namespace compilador.AnalisisLexico
 
         public String DevolverResultado()
         {
-            return ResultadoAnaLex; 
+            return ResultadoAnaLex;
         }
 
         public void Reiniciar()
@@ -83,7 +83,7 @@ namespace compilador.AnalisisLexico
 
         public void ReiniciarComentario()
         {
-           
+
             EstadoActual = 34;
             ContinuarAnalisis = true;
         }
@@ -314,7 +314,7 @@ namespace compilador.AnalisisLexico
         {
             LeerSiguienteCaracter();
             DevorarEspacioBlanco();
-            if(EsLetraF())
+            if (EsLetraF())
             {
                 EstadoActual = 61;
                 FormarLexema();
@@ -402,12 +402,12 @@ namespace compilador.AnalisisLexico
             else if (EsComamillaDoble())
             {
                 EstadoActual = 43;
-                
+
             }
             else if (EsComamillaSimple())
             {
                 EstadoActual = 38;
-                
+
             }
             else if (EsFinLinea())
             {
@@ -492,7 +492,7 @@ namespace compilador.AnalisisLexico
             int PosicionFinal = Puntero - 1;
 
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
-            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.SIMBOLO + "," + Categoria.SUMA + "," + Lexema +")";
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.SIMBOLO + "," + Categoria.SUMA + "," + Lexema + ")";
             FormarComponente(Lexema, Categoria.SUMA, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.SIMBOLO);
 
             ContinuarAnalisis = false;
@@ -509,10 +509,11 @@ namespace compilador.AnalisisLexico
             ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.SIMBOLO + "," + Categoria.RESTA + "," + Lexema + ")";
             FormarComponente(Lexema, Categoria.RESTA, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.SIMBOLO);
 
+
             ContinuarAnalisis = false;
         }
 
-            
+
 
         private void ProcesarEstado7()
         {
@@ -522,8 +523,9 @@ namespace compilador.AnalisisLexico
             int PosicionFinal = Puntero - 1;
 
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
-            ResultadoAnaLex = ResultadoAnaLex + "("+ Tipo.SIMBOLO+ "," + Categoria.MULTIPLICACION + "," + Lexema + ")" ;
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.SIMBOLO + "," + Categoria.MULTIPLICACION + "," + Lexema + ")";
             FormarComponente(Lexema, Categoria.MULTIPLICACION, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.SIMBOLO);
+
 
             ContinuarAnalisis = false;
         }
@@ -555,6 +557,7 @@ namespace compilador.AnalisisLexico
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
             ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.SIMBOLO + "," + Categoria.MODULO + "," + Lexema + ")";
             FormarComponente(Lexema, Categoria.MODULO, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.SIMBOLO);
+
 
             ContinuarAnalisis = false;
         }
@@ -609,7 +612,7 @@ namespace compilador.AnalisisLexico
             DevolverPuntero();
 
             //String Categoria = "NUMERO ENTERO";
-            
+
             int PosicionInicial = Puntero - Lexema.Length;
             int PosicionFinal = Puntero - 1;
 
@@ -642,11 +645,11 @@ namespace compilador.AnalisisLexico
         {
             DevolverPuntero();
 
-            
-            
+
+
             int PosicionInicial = Puntero - Lexema.Length;
             int PosicionFinal = Puntero - 1;
-            
+
 
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
             ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.IDENTIFICADOR + "," + Lexema + ")";
@@ -657,37 +660,40 @@ namespace compilador.AnalisisLexico
         private void ProcesarEstado17()
         {
             DevolverPuntero();
+
             int PosicionInicial = Puntero - Lexema.Length;
-            int PosicionFinal = Puntero - 1;
-            //MessageBox.Show("Error en linea "+NumeroLinea  + ": Decimal con el caracter " + "'"+CaracterActual+"'" + " no reconocido, no es permitido");
-            
+            int PosicionFinal = Puntero;
+
+
+            //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.IDENTIFICADOR + "," + Lexema + ")";
 
             FormarComponente(Lexema + "0", Categoria.NUMERO_DECIMAL, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.DUMMY);
 
-            Tabla.ObtenerInstancia().Agregar(Componente);
-
-            String Falla = "Número decimal no válido:" + Lexema + CaracterActual;
-            String Causa = "Recibí "+CaracterActual+".Luego del separador decimal, se esperaba un dígito de 0 a 9";
-            String Solucion = "Asegúrese de que luego de la parte decimal, haya ingresado un dígito entre 0 y 9.";
+            string Falla = "Numero decimal no valido: " + Lexema + CaracterActual;
+            string Causa = "Recibí " + CaracterActual + " y esperaba digito de 0 a 9";
+            string Solucion = "Asegurese que luego de la parte decimal aparezca un digito del 0 al 9";
 
             Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
             GestorErrores.ObtenerInstancia().Agregar(Error);
             ContinuarAnalisis = false;
-            //throw new Exception("Decimal con el caracter:" + CaracterActual + ", No es permitido...");
         }
 
         private void ProcesarEstado18()
         {
+
+            //
             int PosicionInicial = Puntero - 1;
             int PosicionFinal = Puntero - 1;
+            //MessageBox.Show("Error en linea " + NumeroLinea + ": Símbolo " + "'" + CaracterActual + "'" + " no reconocido, no permitido");
 
-            String Falla = "Símbolo no válido:" + Lexema + CaracterActual;
-            String Causa = "Recibí " + CaracterActual + ". El cual no es soportado.";
-            String Solucion = "Asegúrese de que el símbolo sea aceptado por el lenguaje.";
+            string Falla = "Simbolo no valido: " + CaracterActual;
+            string Causa = "Recibí " + CaracterActual + " el cual no es soportado";
+            string Solucion = "Asegurese de que el simbolo sea aceptado por el lenguaje";
 
             Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
             GestorErrores.ObtenerInstancia().Agregar(Error);
-            throw new Exception("Se ha presentado un error que impide continuar con el análisis léxico.");
+            //throw new Exception("Se ha presentado un error que impide continuar con el análisis léxico..."); 
         }
 
         private void ProcesarEstado19()
@@ -843,10 +849,23 @@ namespace compilador.AnalisisLexico
 
         private void ProcesarEstado29()
         {
-            int NumeroLinea = NumeroLineaActual;
             DevolverPuntero();
-            //throw new Exception("Asignación de igualdad no válida con el caracter:" + CaracterActual + ", No es permitida.");
-            MessageBox.Show("Error en linea " + NumeroLinea + ": Asignación con el caracter " + "'" + CaracterActual + "'" + " no válida");
+
+            int PosicionInicial = Puntero - Lexema.Length;
+            int PosicionFinal = Puntero;
+
+
+            //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.DUMMY + "," + Categoria.ASIGNACION + "," + Lexema + ")";
+
+            FormarComponente(Lexema + "=", Categoria.ASIGNACION, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.DUMMY);
+
+            string Falla = "Operacion asignacion no valida: " + Lexema + CaracterActual;
+            string Causa = "Recibí " + CaracterActual + " y esperaba signo =";
+            string Solucion = "Asegurese que luego de los dos puntos siga el signo =";
+
+            Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
+            GestorErrores.ObtenerInstancia().Agregar(Error);
             ContinuarAnalisis = false;
         }
 
@@ -882,10 +901,23 @@ namespace compilador.AnalisisLexico
 
         private void ProcesarEstado32()
         {
-            int NumeroLinea = NumeroLineaActual;
             DevolverPuntero();
-            //throw new Exception("Asignación diferencia no válida con el caracter:" + CaracterActual + ", No es permitida.");
-            MessageBox.Show("Error en linea " + NumeroLinea + ": Asignación de diferencia con el caracter " + "'" + CaracterActual + "'" + " no válida");
+
+            int PosicionInicial = Puntero - Lexema.Length;
+            int PosicionFinal = Puntero;
+
+
+            //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.DUMMY + "," + Categoria.DIFERENTE_QUE + "," + Lexema + ")";
+
+            FormarComponente(Lexema + "=", Categoria.DIFERENTE_QUE, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.DUMMY);
+
+            string Falla = "Operacion desigualdad no valida: " + Lexema + CaracterActual;
+            string Causa = "Recibí " + CaracterActual + " y esperaba signo =";
+            string Solucion = "Asegurese que luego de ! siga el signo =";
+
+            Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
+            GestorErrores.ObtenerInstancia().Agregar(Error);
             ContinuarAnalisis = false;
 
         }
@@ -985,7 +1017,7 @@ namespace compilador.AnalisisLexico
             if (EsComamillaSimple())
             {
                 EstadoActual = 40;
-                
+
             }
             else
             {
@@ -1002,7 +1034,7 @@ namespace compilador.AnalisisLexico
             int PosicionFinal = Puntero - 1;
 
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
-            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL+ "," + Categoria.CARACTER + "," + Lexema + ")";
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.CARACTER + "," + Lexema + ")";
             FormarComponente(Lexema, Categoria.CARACTER, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.LITERAL);
 
             ContinuarAnalisis = false;
@@ -1010,31 +1042,32 @@ namespace compilador.AnalisisLexico
 
         private void ProcesarEstado41()
         {
-            int NumeroLinea = NumeroLineaActual;
-            DevolverPuntero();
-            //throw new Exception("Asignación diferencia no válida con el caracter:" + CaracterActual + ", No es permitida.");
-            MessageBox.Show("Error en linea " + NumeroLinea + ": Se esperaba un caracter");
-            ContinuarAnalisis = false;
+            int PosicionInicial = Puntero - Lexema.Length;
+            int PosicionFinal = Puntero - 1;
+            //MessageBox.Show("Error en linea " + NumeroLinea + ": Símbolo " + "'" + CaracterActual + "'" + " no reconocido, no permitido");
+
+            string Falla = "Simbolo no valido: " + CaracterActual;
+            string Causa = "Se esperaba un caracter antes de cerrar con '";
+            string Solucion = "Asegurese de que el caracter sea valido para el sistema";
+
+            Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
+            GestorErrores.ObtenerInstancia().Agregar(Error);
+            throw new Exception("Se ha presentado un error que impide continuar con el análisis léxico...");
 
         }
         private void ProcesarEstado42()
         {
-            int NumeroLinea = NumeroLineaActual;
             int PosicionInicial = Puntero - Lexema.Length;
             int PosicionFinal = Puntero - 1;
+            //MessageBox.Show("Error en linea " + NumeroLinea + ": Símbolo " + "'" + CaracterActual + "'" + " no reconocido, no permitido");
 
-            //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
-           // ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.CARACTER + "," + Lexema + ")";
-            FormarComponente(Lexema, Categoria.CARACTER, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.LITERAL);
+            string Falla = "Simbolo no valido: " + CaracterActual;
+            string Causa = "Se esperaba que el caracter se cerrara con '";
+            string Solucion = "Asegurese de que el caracter se cierre con '";
 
-            
-
-
-            
-            DevolverPuntero();
-            //throw new Exception("Asignación diferencia no válida con el caracter:" + CaracterActual + ", No es permitida.");
-            MessageBox.Show("Error en linea " + NumeroLinea + ": Se esperaba comilla simple");
-            ContinuarAnalisis = false;
+            Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
+            GestorErrores.ObtenerInstancia().Agregar(Error);
+            throw new Exception("Se ha presentado un error que impide continuar con el análisis léxico...");
 
         }
         private void ProcesarEstado43()
@@ -1048,14 +1081,14 @@ namespace compilador.AnalisisLexico
             }
             else
             {
-                EstadoActual = 46;
+                EstadoActual = 45;
             }
 
         }
         private void ProcesarEstado44()
         {
             LeerSiguienteCaracter();
-            if (EsFinLinea())
+            if (EsFinArchivo())
             {
                 EstadoActual = 66;
                 FormarLexema();
@@ -1084,6 +1117,8 @@ namespace compilador.AnalisisLexico
 
             ContinuarAnalisis = false;
         }
+
+        //no se esta usando
         private void ProcesarEstado46()
         {
             int NumeroLinea = NumeroLineaActual;
@@ -1371,27 +1406,29 @@ namespace compilador.AnalisisLexico
             ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.FALSO + "," + Lexema + ")";
 
             FormarComponente(Lexema, Categoria.FALSO, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.LITERAL);
-            
+
             ContinuarAnalisis = false;
         }
 
         private void ProcesarEstado66()
         {
-            int NumeroLinea = NumeroLineaActual;
+            DevolverPuntero();
+
             int PosicionInicial = Puntero - Lexema.Length;
-            int PosicionFinal = Puntero - 1;
+            int PosicionFinal = Puntero;
+
 
             //MessageBox.Show("Categoria:" + Categoria + ", Lexema:" + Lexema);
-            // ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.LITERAL + "," + Categoria.CARACTER + "," + Lexema + ")";
-            FormarComponente(Lexema, Categoria.CARACTER, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.LITERAL);
+            ResultadoAnaLex = ResultadoAnaLex + "(" + Tipo.DUMMY + "," + Categoria.CADENA + "," + Lexema + ")";
 
+            FormarComponente(Lexema + '"', Categoria.CADENA, NumeroLineaActual, PosicionInicial, PosicionFinal, Tipo.DUMMY);
 
+            string Falla = "Cadena no valida: " + Lexema + CaracterActual;
+            string Causa = "La cadena no se cerro" + " se esperaba signo " + '"';
+            string Solucion = "Asegurese que luego de escribir una cadena, cerrarla con " + '"';
 
-
-
-            DevolverPuntero();
-            //throw new Exception("Asignación diferencia no válida con el caracter:" + CaracterActual + ", No es permitida.");
-            MessageBox.Show("Error en linea " + NumeroLinea + ": Se esperaba comilla doble");
+            Error Error = Error.Crear(NumeroLineaActual, PosicionInicial, PosicionFinal, Falla, Causa, Solucion, TipoError.LEXICO);
+            GestorErrores.ObtenerInstancia().Agregar(Error);
             ContinuarAnalisis = false;
 
         }
@@ -1516,7 +1553,7 @@ namespace compilador.AnalisisLexico
             return "\u0022".Equals(CaracterActual);
         }
 
-     
+
 
         private bool EsLetraF()
         {
@@ -1557,6 +1594,6 @@ namespace compilador.AnalisisLexico
         {
             return "D".Equals(CaracterActual);
         }
-      
+
     }
 }

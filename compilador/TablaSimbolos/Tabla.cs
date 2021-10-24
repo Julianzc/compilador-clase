@@ -26,7 +26,6 @@ namespace compilador.TablaSimbolos
         public void Agregar(ComponenteLexico Componente)
         {
             TablaPalabrasReservadas.ObtenerInstancia().Agregar(Componente);
-            
             TablaSimbolos.ObtenerInstancia().Agregar(Componente);
             TablaLiterales.ObtenerInstancia().Agregar(Componente);
             TablaDummy.ObtenerInstancia().Agregar(Componente);
@@ -41,6 +40,14 @@ namespace compilador.TablaSimbolos
             else if (Tipo.LITERAL.Equals(Tipo)){
                 TablaLiterales.ObtenerInstancia().Limpiar();
             }
+            else if (Tipo.PALABRA_RESERVADA.Equals(Tipo))
+            {
+                TablaPalabrasReservadas.ObtenerInstancia().Limpiar();
+            }
+            else if (Tipo.DUMMY.Equals(Tipo))
+            {
+                TablaDummy.ObtenerInstancia().Limpiar();
+            }
         }
 
         public List<ComponenteLexico> ObtenerComponentes(Tipo Tipo)
@@ -54,6 +61,14 @@ namespace compilador.TablaSimbolos
             else if (Tipo.LITERAL.Equals(Tipo))
             {
                 Componentes = TablaLiterales.ObtenerInstancia().ObtenerComponentes();
+            }
+            else if (Tipo.PALABRA_RESERVADA.Equals(Tipo))
+            {
+                Componentes = TablaPalabrasReservadas.ObtenerInstancia().ObtenerComponentes();
+            }
+            else if (Tipo.DUMMY.Equals(Tipo))
+            {
+                Componentes = TablaDummy.ObtenerInstancia().ObtenerComponentes();
             }
             return Componentes;
         }
